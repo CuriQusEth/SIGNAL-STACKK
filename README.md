@@ -1,57 +1,42 @@
-# SIGNAL STACK
+# SIGNAL STACK ORCHESTRATOR
 
-A satisfying, addictive, and visually stunning neon stacking game on Base Mainnet.
+A satisfying, addictive, and visually stunning neon stacking game driven by the Signal Stack Orchestrator AI Agent.
 
-## Game Concept
+## Overview
+Signal Stack platformunda çalışan ERC-8004 uyumlu AI Agent. Signal stacking, multi-layer signal processing, stack management ve intelligent signal orchestration yapan güçlü orchestrator.
 
-**SIGNAL STACK** is a satisfying, addictive, and visually stunning stacking game where you build the tallest **Signal Tower** by dropping glowing signal blocks. Time your drops perfectly to create massive chain reactions and build the highest, most stable signal tower in the universe.
+## Endpoints
 
-## Core Gameplay
+* **Agent Registration**: `https://signal-stackk.vercel.app/.well-known/agent-card.json`
+* **Agent API**: `https://signal-stackk.vercel.app/api/agent`
+* **MCP Integration**: `https://signal-stackk.vercel.app/api/mcp`
 
-- Classic stacking mechanics: Tap or swipe at the right moment to drop glowing signal blocks.
-- Blocks fall from the top and must land perfectly on the tower.
-- Create **Signal Chains** by connecting same-colored or same-frequency blocks.
-- Chain reactions trigger beautiful cascade effects and massive score multipliers.
-- The tower becomes increasingly unstable as it grows taller — balance is key.
-- Increasing speed and difficulty as the tower rises.
+## Capabilities
+- signal-stacking
+- multi-layer-processing
+- stack-management
+- signal-orchestration
+- pattern-analysis
+- real-time-stacking
+- mcp-command-execution
 
-## Features
+## MCP Connection Guide
 
-- Fully responsive, portrait mode optimized
-- High-performance Canvas with physics and stacking system
-- Wagmi + Viem + Base Account connectivity
-- ERC-8021 Transaction Attribution support
-- ERC-8004 Trustless Agents protocol endpoints
-- SIWE (Sign-In with Ethereum) real transaction score submission
+The system includes a fully configured Model Context Protocol (MCP) server endpoint available at `/api/mcp`. 
+It exposes standard MCP functions including mapping and command execution natively to remote consumers.
 
 ## Tech Stack
+- Frontend: React & Next.js 14 App Router (Deployed on Vercel)
+- Logic: TypeScript, Web3 (viem / wagmi)
+- Physics & Styles: Matter.js, Framer Motion, Tailwind CSS
 
-- React
-- Vite
-- Express
-- Tailwind CSS
-- Matter.js
-- Framer Motion
-- Wagmi / Viem
-- Zustand
+## How to Run Locally
 
-## Deployment
+Clone the repository and install dependencies:
 
-To deploy this project to a standard host:
+```bash
+npm install
+npm run dev
+```
 
-1. Build the project:
-   ```bash
-   npm run build
-   ```
-2. Start the production server:
-   ```bash
-   npm start
-   ```
-
-## Agent Protocol endpoints
-
-The application exposes Agent / MCP Protocol endpoints:
-* `GET /.well-known/agent-card.json` - Agent capabilities configuration
-* `GET /api/agent` - Main agent control API
-* `GET /api/mcp` - MCP details
-* `POST /api/mcp` - MCP command execution
+The application and MCP routes will start locally (default configuration uses Next.js). Open `http://localhost:3000` to interact.
