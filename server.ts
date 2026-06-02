@@ -35,30 +35,34 @@ async function startServer() {
   // MCP POST Endpoint
   app.post("/api/mcp", (req, res) => {
     try {
-      const body = req.body;
+      const body = req.body || {};
       const method = body.method;
 
+      const jsonRpcId = body.id;
+      const isJsonRpc = !!jsonRpcId || body.jsonrpc === "2.0";
+
+      const sendResponse = (data) => {
+        if (isJsonRpc) {
+          return res.json({
+            jsonrpc: "2.0",
+            id: jsonRpcId || null,
+            result: data
+          });
+        }
+        return res.json(data);
+      };
+
       if (method === "initialize") {
-        return res.json({
-          protocolVersion: "1.0.0",
-          capabilities: {},
-          serverInfo: {
-            name: "Signal Stack Orchestrator",
-            version: "1.0.0"
-          }
+        return sendResponse({
+          protocolVersion: "2024-11-05",
+          capabilities: { tools: {}, prompts: {}, resources: {} },
+          serverInfo: { name: "Signal Stack Orchestrator", version: "1.0.0" }
         });
       }
 
       if (method === "tools/list") {
-        return res.json({
+        return sendResponse({
           tools: [
-            { name: "get_race_status", description: "Get the current race status.", inputSchema: { type: "object", properties: {} } },
-            { name: "start_race", description: "Start a new race.", inputSchema: { type: "object", properties: {} } },
-            { name: "get_leaderboard", description: "Get the current leaderboard.", inputSchema: { type: "object", properties: {} } },
-            { name: "optimize_speed", description: "Optimize vehicle speed.", inputSchema: { type: "object", properties: {} } },
-            { name: "get_track_info", description: "Get track details.", inputSchema: { type: "object", properties: {} } }
-          ],
-          skills: [
             { name: "get_race_status", description: "Get the current race status.", inputSchema: { type: "object", properties: {} } },
             { name: "start_race", description: "Start a new race.", inputSchema: { type: "object", properties: {} } },
             { name: "get_leaderboard", description: "Get the current leaderboard.", inputSchema: { type: "object", properties: {} } },
@@ -70,13 +74,17 @@ async function startServer() {
 
       if (method === "tools/call") {
         const tool = body.params?.name;
-        return res.json({
+        return sendResponse({
           content: [{ type: "text", text: `Executed [${tool}] successfully via MCP protocol.` }]
         });
       }
 
-      if (method === "prompts/list" || method === "resources/list") {
-        return res.json({ prompts: [], resources: [] });
+      if (method === "prompts/list") {
+        return sendResponse({ prompts: [] });
+      }
+
+      if (method === "resources/list") {
+        return sendResponse({ resources: [] });
       }
 
       res.json({
