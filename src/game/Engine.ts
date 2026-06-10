@@ -232,28 +232,75 @@ export class GameEngine {
     // Update highest Y logic if stable
     if (allResting && stack.length > 0 && !this.activeDriftingBlock) {
        // Only trigger when a NEW block finishes resting
-       if (newHighestY < this.highestY - 20) {
-           this.highestY = newHighestY;
-           this.towerHeight++;
+       // Let's also check for matches!
+       
+       let didMatch = false;
+       const toRemove = new Set<Matter.Body>();
+       const validBlocks = this.blocks.filter(b => !b.isStatic && b.plugin?.theme);
+       
+       for (const block of validBlocks) {
+           if (toRemove.has(block)) continue;
            
-           // Combo Check
-           const lastBlock = this.blocks[this.blocks.length - 1];
-           const prevBlock = this.blocks[this.blocks.length - 2];
-           if (lastBlock && prevBlock && lastBlock.plugin?.theme && prevBlock.plugin?.theme && 
-               lastBlock.plugin.theme.primary === prevBlock.plugin.theme.primary) {
-               this.combo++;
-               this.multiplier += 0.5;
-               this.screenShake = 10 + (this.combo * 2); // Start screen shake
-           } else {
-               this.combo = 0;
-               this.multiplier = 1;
+           // BFS to find connected components of same color
+           const component = new Set<Matter.Body>();
+           const queue = [block];
+           component.add(block);
+           
+           while (queue.length > 0) {
+               const curr = queue.shift()!;
+               
+               for (const other of validBlocks) {
+                   if (component.has(other)) continue;
+                   if (curr.plugin.theme.primary !== other.plugin.theme.primary) continue;
+                   
+                   const dx = Math.abs(curr.position.x - other.position.x);
+                   const dy = Math.abs(curr.position.y - other.position.y);
+                   
+                   if (dx < this.blockWidth * 1.1 && dy < this.blockHeight * 1.5) {
+                       component.add(other);
+                       queue.push(other);
+                   }
+               }
            }
+           
+           if (component.size >= 3) {
+               component.forEach(b => toRemove.add(b));
+               didMatch = true;
+           }
+       }
+       
+       if (didMatch) {
+           // Remove matched blocks
+           toRemove.forEach(b => {
+               Matter.World.remove(this.world, b);
+               this.blocks = this.blocks.filter(blk => blk !== b);
+           });
+           
+           this.combo++;
+           this.multiplier += 0.5 * this.combo;
+           this.score += toRemove.size * 50 * this.multiplier;
+           this.screenShake = 20 + (toRemove.size * 3);
+           this.updateZustand();
+           
+           // Don't spawn yet, wait for cascade to settle
+           return;
+       }
 
-           this.score += 10 * this.multiplier;
+       if (!didMatch) {
+           // If we didn't match anything, we are stable. Update highest Y and spawn next block.
+           this.highestY = newHighestY;
+           this.towerHeight = stack.length; // Approximate tower height by block count or calculate max tower
+           this.score += 10; // 10 points for a stable placement
            this.updateZustand();
            
            setTimeout(() => {
-              this.spawnDrifter();
+              // Ensure we only spawn if still no drifter
+              if (!this.activeDriftingBlock && !this.isGameOver) {
+                 this.spawnDrifter();
+                 this.combo = 0;
+                 this.multiplier = 1;
+                 this.updateZustand();
+              }
            }, 200);
        }
     }

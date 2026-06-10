@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useGameStore } from '../../store/gameStore';
 
 export function HUD() {
@@ -28,16 +28,19 @@ export function HUD() {
         </div>
       </motion.div>
 
-      {combo > 1 && (
-        <motion.div 
-          key={combo}
-          initial={{ scale: 1.5, opacity: 0, rotate: 12 }}
-          animate={{ scale: 1, opacity: 1, rotate: 12 }}
-          className="absolute right-5 top-80 bg-[#FF00E5] text-white px-3 py-1 rounded-full font-bold text-[14px] shadow-[0_0_20px_rgba(255,0,229,0.6)] z-20 pointer-events-none"
-        >
-          X{combo} RESONANCE
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {combo > 1 && (
+          <motion.div 
+            key={combo}
+            initial={{ scale: 1.5, opacity: 0, rotate: 12, y: -20 }}
+            animate={{ scale: 1, opacity: 1, rotate: 12, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            className="absolute right-5 top-72 bg-[#FF00E5] text-white px-3 py-1 rounded-full font-bold text-[14px] shadow-[0_0_20px_rgba(255,0,229,0.6)] z-20 pointer-events-none"
+          >
+            X{combo} RESONANCE
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* On-chain Footer */}
       <div className="absolute bottom-6 w-full flex justify-center gap-3 z-30 pointer-events-auto">
@@ -48,18 +51,9 @@ export function HUD() {
              window.dispatchEvent(new CustomEvent('drop-signal'));
              e.stopPropagation();
           }}
-          className="bg-[linear-gradient(135deg,#00F5FF,#0055FF)] border-none shadow-[0_4px_15px_rgba(0,245,255,0.3)] px-7 py-3.5 rounded-xl font-bold text-[14px] text-white flex items-center gap-2 cursor-pointer active:scale-95 transition-transform"
+          className="bg-[linear-gradient(135deg,#00F5FF,#0055FF)] border-none shadow-[0_4px_15px_rgba(0,245,255,0.3)] px-10 py-4 rounded-xl font-black text-[16px] text-white flex items-center justify-center tracking-widest gap-2 cursor-pointer active:scale-95 transition-transform"
         >
-          DROP SIGNAL
-        </button>
-        <button 
-          onPointerDown={(e) => e.stopPropagation()}
-          onClick={() => {
-            alert('GM sequence initiated (on-chain placeholder)!');
-          }}
-          className="bg-[linear-gradient(135deg,#FF00E5,#9D00FF)] border-none shadow-[0_4px_15px_rgba(255,0,229,0.3)] px-7 py-3.5 rounded-xl font-bold text-[14px] text-white flex items-center gap-2 cursor-pointer active:scale-95 transition-transform"
-        >
-          SAY GM
+          DROP BLOCK
         </button>
       </div>
     </>

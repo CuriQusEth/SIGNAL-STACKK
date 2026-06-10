@@ -1,14 +1,15 @@
 import { motion } from 'motion/react';
 import { useGameStore } from '../../store/gameStore';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage, useWriteContract } from 'wagmi';
 import { getAttributionPayload } from '../../lib/erc8021';
-import { ExternalLink, RefreshCw, Save } from 'lucide-react';
+import { ExternalLink, RefreshCw, Save, Sun } from 'lucide-react';
 import { useState } from 'react';
 
 export function GameOverScreen() {
   const { score, height, setGameState, resetStats } = useGameStore();
   const { isConnected, address } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { writeContract } = useWriteContract();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -42,6 +43,21 @@ export function GameOverScreen() {
     }
   };
 
+  const sendGMTransaction = () => {
+    if (!isConnected) return;
+    writeContract({
+      address: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+      abi: [{
+        "inputs": [],
+        "name": "sayGM",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }],
+      functionName: 'sayGM',
+    });
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
@@ -60,11 +76,19 @@ export function GameOverScreen() {
          </div>
          <div className="flex justify-between items-end">
             <span className="text-gray-400 font-mono text-sm uppercase">Total Signal Score</span>
-            <span className="text-magenta-400 font-black text-3xl">{score}</span>
+            <span className="text-[#FF00E5] font-black text-3xl">{score}</span>
          </div>
       </div>
 
       <div className="flex flex-col gap-4 w-full max-w-sm">
+        {isConnected && (
+          <button 
+            onClick={sendGMTransaction}
+            className="px-3 py-2 rounded-lg bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center gap-2 font-['Cinzel'] text-xs font-bold"
+          >
+            <Sun className="w-5 h-5" /> Say GM
+          </button>
+        )}
         <button 
           onClick={handleRecord}
           disabled={isSubmitting || submitted}
@@ -78,7 +102,7 @@ export function GameOverScreen() {
              </>
           ) : (
             <>
-              <Save className="w-5 h-5" /> Record Signal on-chain
+              <Save className="w-5 h-5" /> Record This Signal Tower on-chain
             </>
           )}
         </button>
