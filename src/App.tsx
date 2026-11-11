@@ -22,14 +22,14 @@ export default function App() {
     writeContract({
       address: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
       abi: [{
-        "inputs": [],
-        "name": "sayGM",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        inputs: [],
+        name: 'sayGM',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
       }],
       functionName: 'sayGM',
-    });
+    } as any);
   };
 
   return (
@@ -83,7 +83,15 @@ export default function App() {
             <span className="text-[#00F5FF] font-mono">612m</span>
           </div>
           <div className="mt-auto bg-[#00F5FF]/5 p-4 rounded-xl border border-[#00F5FF]/10">
-            <div className="text-[10px] uppercase text-[#888] tracking-[1px] mb-2">Base Mainnet</div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] uppercase text-cyan-400 font-bold tracking-[1px] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                Base Denim Mainnet
+              </span>
+              <span className="text-[9px] bg-cyan-500/20 text-cyan-300 font-mono px-1.5 py-0.5 rounded border border-cyan-500/30">
+                200ms
+              </span>
+            </div>
             <div className="text-[11px] text-[#00F5FF]/80">Attribution: {ATTRIBUTION_CODE}</div>
             <div className="text-[11px] text-[#00F5FF]/80">Builder: {BUILDER_CODE}</div>
           </div>
@@ -116,18 +124,19 @@ export default function App() {
           </div>
           <div className="bg-white/5 p-3 rounded-lg text-[12px] border border-[#222]">
             <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? 'bg-[#00FF00] shadow-[0_0_8px_#00FF00]' : 'bg-red-500 shadow-[0_0_8px_red]'} mr-2`} />
-            {isConnected ? 'Connected to Base' : 'Not Connected'}
+            {isConnected ? 'Base Denim (8453)' : 'Not Connected'}
             <br />
             <span className="text-[#666] font-mono block mt-1">{address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Connect via Title Screen'}</span>
           </div>
 
-          <div className="text-[12px] uppercase text-[#555] tracking-[2px] border-b border-[#222] pb-2.5 mt-5">
-            Recent Transmissions
+          <div className="text-[12px] uppercase text-[#555] tracking-[2px] border-b border-[#222] pb-2.5 mt-5 flex justify-between items-center">
+            <span>Denim Network</span>
+            <span className="text-[10px] text-green-400 font-mono">200ms / block</span>
           </div>
           <div className="text-[11px] text-[#666]">
             <div className="mb-2">• 0.0001 ETH Staked - GM Button</div>
             <div className="mb-2">• Height 120m Recorded on-chain</div>
-            <div className="mb-2">• Signal Codex: 8/24 Unlocked</div>
+            <div className="mb-2">• Canonical Finality: Active</div>
           </div>
         </div>
 

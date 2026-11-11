@@ -48,14 +48,14 @@ export function GameOverScreen() {
     writeContract({
       address: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
       abi: [{
-        "inputs": [],
-        "name": "sayGM",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        inputs: [],
+        name: 'sayGM',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
       }],
       functionName: 'sayGM',
-    });
+    } as any);
   };
 
   return (
@@ -98,11 +98,11 @@ export function GameOverScreen() {
             <RefreshCw className="w-5 h-5 animate-spin" />
           ) : submitted ? (
              <>
-               <ExternalLink className="w-5 h-5" /> Recorded on Base
+               <ExternalLink className="w-5 h-5" /> Recorded on Base Denim (200ms)
              </>
           ) : (
             <>
-              <Save className="w-5 h-5" /> Record This Signal Tower on-chain
+              <Save className="w-5 h-5" /> Record Tower on Base Denim
             </>
           )}
         </button>

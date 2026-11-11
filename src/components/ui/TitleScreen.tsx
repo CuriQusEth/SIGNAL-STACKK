@@ -47,21 +47,20 @@ export function TitleScreen() {
         {!isConnected ? (
           <button 
             onClick={() => connect({ connector: injected() })}
-            className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 transition-colors font-mono border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 rounded-lg hover:bg-cyan-500/20"
           >
-            <Zap className="w-4 h-4" />
-            Connect Base Mainnet
+            <Zap className="w-4 h-4 text-cyan-400" />
+            Connect Base Denim Mainnet
           </button>
         ) : (
           <div className="flex flex-col items-center gap-2">
             <span className="text-xs text-green-400 font-mono flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              Connected: {address?.slice(0,6)}...{address?.slice(-4)}
+              Base Denim: {address?.slice(0,6)}...{address?.slice(-4)}
             </span>
-            <button className="flex items-center gap-2 text-sm text-blue-400 hover:text-white transition-colors">
-              <Trophy className="w-4 h-4" />
-              View Leaderboard
-            </button>
+            <span className="text-[10px] text-cyan-400/70 font-mono">
+              200ms Canonical Blocks
+            </span>
           </div>
         )}
       </div>
